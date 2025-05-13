@@ -1,0 +1,55 @@
+-- ========================================
+-- CREACIÓN DE BASE DE DATOS
+-- ========================================
+CREATE DATABASE InventarioCastores;
+GO
+
+USE InventarioCastores;
+GO
+
+-- Tabla: producto
+CREATE TABLE producto (
+    id_producto BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    cantidad INT NULL,
+    nombre VARCHAR(255) NULL,
+    precio FLOAT NULL,
+    status BIT NULL
+);
+GO
+
+-- Tabla: movimiento_inventario
+CREATE TABLE movimiento_inventario (
+    id BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    cantidad INT NOT NULL,
+    descripcion VARCHAR(255) NULL,
+    fecha DATETIME2(6) NULL,
+    tipo VARCHAR(10) CHECK (tipo IN ('ENTRADA', 'SALIDA')) NULL,
+    id_producto BIGINT NOT NULL,
+    CONSTRAINT FK_mov_inv_producto FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+);
+GO
+
+-- Tabla: role
+CREATE TABLE role (
+    id_role BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NULL
+);
+GO
+
+-- Tabla: [user]
+CREATE TABLE [user] (
+    id_user BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [password] VARCHAR(255) NULL,
+    username VARCHAR(255) NULL
+);
+GO
+
+-- Tabla: user_roles
+CREATE TABLE user_roles (
+    id_user BIGINT NOT NULL,
+    id_role BIGINT NOT NULL,
+    PRIMARY KEY (id_user, id_role),
+    CONSTRAINT FK_user_roles_user FOREIGN KEY (id_user) REFERENCES [user](id_user),
+    CONSTRAINT FK_user_roles_role FOREIGN KEY (id_role) REFERENCES role(id_role)
+);
+GO
