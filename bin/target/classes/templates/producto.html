@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inventario de Productos</title>
+</head>
+<body>
+    <h1>Inventario de Productos</h1>
+    
+    <!-- Formulario para agregar un nuevo producto -->
+    <h2>Agregar Nuevo Producto</h2>
+    <form th:action="@{api/agregar}" method="post">
+        <label for="nombre">Nombre del Producto:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <label for="nombre">Precio</label>
+        <input type="text" id="precio" name="precio" required>
+        <button type="submit">Agregar Producto</button>
+    </form>
+    
+    <!-- Listado de productos -->
+    <h2>Productos Activos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="producto : ${productosActivos}">
+                <td th:text="${producto.nombre}"></td>
+                <td th:text="${producto.cantidad}"></td>
+                <td>
+                    <form th:action="@{api/aumentar}" method="post">
+                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+                        <input type="number" name="cantidad" min="1" required>
+                        <button type="submit">Aumentar Inventario</button>
+                    </form>
+                    <form th:action="@{api/restar}" method="post">
+                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+                        <input type="number" name="cantidad" min="1" required>
+                        <button type="submit">Restar Inventario</button>
+                    </form>
+                    <form th:action="@{api/bajar}" method="post">
+                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+                        <button type="submit">Dar de Baja</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Listado de productos inactivos -->
+    <h2>Productos Inactivos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="producto : ${productosInactivos}">
+                <td th:text="${producto.nombre}"></td>
+                <td>
+                    <form th:action="@{api/activar}" method="post">
+                        <input type="hidden" name="idProducto" th:value="${producto.idProducto}">
+                        <button type="submit">Activar</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
