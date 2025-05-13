@@ -1,0 +1,20 @@
+1.5 Respuesta =
+SELECT DISTINCT p.*
+FROM productos p
+INNER JOIN ventas v ON p.id = v.id_producto;
+
+1.6 Respuesta =
+SELECT 
+    p.nombre,
+    SUM(v.cantidad) AS total_vendida
+FROM productos p
+INNER JOIN ventas v ON p.id = v.id_producto
+GROUP BY p.nombre;
+
+1.7 Respuesta =
+SELECT 
+    p.nombre,
+    ISNULL(SUM(v.cantidad * v.precio_unitario), 0) AS total_vendido
+FROM productos p
+LEFT JOIN ventas v ON p.id = v.id_producto
+GROUP BY p.nombre;
